@@ -10,7 +10,7 @@ This work was undertaken as part of the "Advanced Learning INE2-DATA 2025 - Deep
 ## 2. Project Structure
 The project is organized into two main Jupyter notebooks, each addressing a distinct aspect of Stable Diffusion:
 
-* **Part 1: Stable Diffusion from Scratch (`stable_diffusion_scratch (2).ipynb`)**
+* **Part 1: Stable Diffusion from Scratch (`stable_diffusion_scratch.ipynb`)**
     * **Objective**: To deconstruct and understand the fundamental building blocks of Stable Diffusion by implementing them individually. This notebook aims to provide a low-level perspective on how these models function.
     * **Key Components Implemented**:
         * Attention Mechanisms: Self-Attention and Cross-Attention.
@@ -20,7 +20,7 @@ The project is organized into two main Jupyter notebooks, each addressing a dist
         * DDPM Sampler: Logic for the diffusion and reverse diffusion (denoising) process.
         * A custom `generate` pipeline to tie these components together for image generation.
 
-* **Part 2: Story-to-Storyboard with Hugging Face (`storyline (1).ipynb`)**
+* **Part 2: Story-to-Storyboard with Hugging Face (`storyline.ipynb`)**
     * **Objective**: To leverage the high-level Hugging Face `diffusers` library to build a practical application capable of generating a sequence of images (a storyboard) from a given textual story.
     * **Workflow**:
         * **Story Input & Segmentation**: Takes a multi-sentence story as input and segments it into smaller, coherent scenes or narrative units (e.g., using `nltk.sent_tokenize` and custom chunking logic like the `segment_story` function).
@@ -35,33 +35,11 @@ The project is organized into two main Jupyter notebooks, each addressing a dist
     ```bash
     pip install -r requirements.txt
     ```
-    * If using `spacy` for advanced text segmentation in `storyline (1).ipynb`, you might also need to download its language model:
-    ```bash
-    python -m spacy download en_core_web_sm
-    ```
 * **Model Checkpoints & Tokenizers**:
-    * **For `stable_diffusion_scratch (2).ipynb`**:
-        * Download the Stable Diffusion v1.5 checkpoint (`v1-5-pruned-emaonly.ckpt`). A common source is the Hugging Face Hub: [runwayml/stable-diffusion-v1-5](https://huggingface.co/runwayml/stable-diffusion-v1-5/tree/main) (look for the `.ckpt` file).
-        * Place the downloaded `.ckpt` file in a `data/` directory at the root of this repository, or update the path in the notebook accordingly.
-        * This notebook also requires CLIP tokenizer files (`vocab.json`, `merges.txt`). You can:
-            * Download them from a CLIP model repository (e.g., [openai/clip-vit-large-patch14](https://huggingface.co/openai/clip-vit-large-patch14/tree/main)) and place them in an accessible path (e.g., a `tokenizer_data/` directory).
-            * Or, as a fallback for easier setup if local files are not preferred, the `CLIPTokenizer.from_pretrained('openai/clip-vit-large-patch14')` method can be used directly within the notebook, which will download them. The provided notebook might use local paths; adjust as needed.
-    * **For `storyline (1).ipynb`**:
+    * **For `storyline .ipynb`**:
         * The Hugging Face `diffusers` library will automatically download the required pre-trained model (e.g., `runwayml/stable-diffusion-v1-5` or `stabilityai/stable-diffusion-2-1-base`, as specified in the notebook) and its associated tokenizer on the first run. An active internet connection is required for this initial download.
 
-## 4. How to Run the Notebooks
-* **Instructions for `stable_diffusion_scratch (2).ipynb`**:
-    1.  Ensure the Python environment and dependencies are set up as described above.
-    2.  Download the `v1-5-pruned-emaonly.ckpt` model and ensure the CLIP tokenizer files are accessible as per the "Model Checkpoints" section. Update paths in the notebook if necessary.
-    3.  Open the notebook in a Jupyter environment (e.g., Jupyter Lab, Google Colab with GPU runtime).
-    4.  Run the cells sequentially. Note that loading models and performing inference can be computationally intensive and may require a GPU for reasonable performance.
-* **Instructions for `storyline (1).ipynb`**:
-    1.  Ensure the Python environment and dependencies are set up.
-    2.  Open the notebook in a Jupyter environment.
-    3.  Run the cells sequentially. The first execution of cells involving model loading from Hugging Face (`StableDiffusionPipeline.from_pretrained`, summarization pipeline) will download model weights and may take some time.
-    4.  You can modify the `story_text` variable within the notebook to generate storyboards for different narratives. The `summarizer` model and `StableDiffusionPipeline` model ID can also be changed to experiment with different capabilities.
-
-## 5. Source Code Documentation
+## 4. Source Code Documentation
 
 This project implements and utilizes several key deep learning components. Below is a brief overview:
 
@@ -86,7 +64,7 @@ This project implements and utilizes several key deep learning components. Below
 
 Detailed explanations and comments are provided within the Jupyter notebooks for each implemented class and function.
 
-## 6. Example Outputs
+## 5. Example Outputs
 
 ![{A72D2130-CDAA-49CC-9EC9-F7CF9F36C684}](https://github.com/user-attachments/assets/5794f683-cd41-4209-89ec-4de9492b9cca)
 
