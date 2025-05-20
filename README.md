@@ -12,6 +12,8 @@ The project is organized into two main Jupyter notebooks, each addressing a dist
 
 * **Part 1: Stable Diffusion from Scratch (`stable_diffusion_scratch.ipynb`)**
     * **Objective**: To deconstruct and understand the fundamental building blocks of Stable Diffusion by implementing them individually. This notebook aims to provide a low-level perspective on how these models function.
+![{2E265778-1A7E-4F5F-BF59-6F4C5009ED0A}](https://github.com/user-attachments/assets/fee25d76-c46c-42d1-a590-bf91c4bd18e8)
+
     * **Key Components Implemented**:
         * Attention Mechanisms: Self-Attention and Cross-Attention.
         * Variational Autoencoder (VAE): Encoder, Decoder, and constituent blocks (Residual, Attention).
