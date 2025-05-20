@@ -1,45 +1,93 @@
 # Project Title: Implementing and Applying Stable Diffusion Models
 
 ## 1. Introduction
-Briefly describe the project: its goal is to explore Stable Diffusion, both by implementing core components from scratch and by using pre-built Hugging Face pipelines for a practical application. Mention this was for the "Advanced Learning INE2-DATA 2025 - Deep Learning Lab" project.
+This project explores the fascinating world of Stable Diffusion, a powerful class of generative models for image synthesis. The primary goal is to gain a deep understanding of Stable Diffusion's architecture and capabilities, achieved through two main approaches:
+1.  Implementing core components of a Stable Diffusion model from scratch using PyTorch.
+2.  Utilizing pre-built Hugging Face `diffusers` pipelines to develop a practical application for generating storyboards from textual narratives.
+
+This work was undertaken as part of the "Advanced Learning INE2-DATA 2025 - Deep Learning Lab" project. It demonstrates both foundational knowledge of the model's internals and the ability to apply these advanced models to creative tasks.
 
 ## 2. Project Structure
-Explain the two main parts of the project and their corresponding notebooks:
+The project is organized into two main Jupyter notebooks, each addressing a distinct aspect of Stable Diffusion:
+
 * **Part 1: Stable Diffusion from Scratch (`stable_diffusion_scratch (2).ipynb`)**
-    * Objective: To understand the fundamental building blocks of Stable Diffusion (VAE, CLIP, UNet, Sampler).
-    * Briefly mention key components implemented.
+    * **Objective**: To deconstruct and understand the fundamental building blocks of Stable Diffusion by implementing them individually. This notebook aims to provide a low-level perspective on how these models function.
+    * **Key Components Implemented**:
+        * Attention Mechanisms: Self-Attention and Cross-Attention.
+        * Variational Autoencoder (VAE): Encoder, Decoder, and constituent blocks (Residual, Attention).
+        * CLIP Text Encoder: Embedding layers and Transformer blocks (CLIPLayer).
+        * UNet Denoising Model: Time Embedding, UNet Residual and Attention blocks, Upsampling/Downsampling, and the overall UNet structure.
+        * DDPM Sampler: Logic for the diffusion and reverse diffusion (denoising) process.
+        * A custom `generate` pipeline to tie these components together for image generation.
+
 * **Part 2: Story-to-Storyboard with Hugging Face (`storyline (1).ipynb`)**
-    * Objective: To use high-level APIs (`diffusers` library) to generate a sequence of images from a story.
-    * Briefly describe the workflow (story segmentation, prompt generation, image generation).
+    * **Objective**: To leverage the high-level Hugging Face `diffusers` library to build a practical application capable of generating a sequence of images (a storyboard) from a given textual story.
+    * **Workflow**:
+        * **Story Input & Segmentation**: Takes a multi-sentence story as input and segments it into smaller, coherent scenes or narrative units (e.g., using `nltk.sent_tokenize` and custom chunking logic like the `segment_story` function).
+        * **Visual Prompt Generation**: Each story segment is transformed into a descriptive visual prompt, potentially using text summarization (via a Hugging Face summarization pipeline) and appending artistic style keywords (as seen in `generate_visual_prompts`).
+        * **Image Generation**: Utilizes a pre-trained Stable Diffusion model (e.g., `runwayml/stable-diffusion-v1-5`) via the `StableDiffusionPipeline` from `diffusers` to generate an image for each visual prompt.
+        * **Storyboard Display**: The generated images are then displayed in sequence, often alongside their corresponding prompts or scene descriptions, forming a visual storyboard.
 
 ## 3. Environment Setup
-* Python version (e.g., Python 3.9+).
+* **Python version**: Python 3.9+ is recommended.
 * **Dependencies**:
-    * "All dependencies are listed in `requirements.txt`. Install them using:"
-    * `pip install -r requirements.txt`
-* **Model Checkpoints**:
-    * For `stable_diffusion_scratch (2).ipynb`:
-        * "Download the Stable Diffusion v1.5 checkpoint (`v1-5-pruned-emaonly.ckpt`) from [Link to Hugging Face model or source, e.g., https://huggingface.co/runwayml/stable-diffusion-v1-5/tree/main]."
-        * "Place it in the `data/` directory (or specify your chosen path)."
-        * "Ensure you have the CLIP tokenizer files (`vocab.json`, `merges.txt`) available and provide their path if necessary or use `CLIPTokenizer.from_pretrained('openai/clip-vit-large-patch14')` as a fallback if local files aren't found."
-    * For `storyline (1).ipynb`:
-        * "The Hugging Face `diffusers` library will automatically download the required model (e.g., `runwayml/stable-diffusion-v1-5` or `stabilityai/stable-diffusion-2-1-base`) on first run. An internet connection is required."
+    * All dependencies are listed in `requirements.txt`. Install them using:
+    ```bash
+    pip install -r requirements.txt
+    ```
+    * If using `spacy` for advanced text segmentation in `storyline (1).ipynb`, you might also need to download its language model:
+    ```bash
+    python -m spacy download en_core_web_sm
+    ```
+* **Model Checkpoints & Tokenizers**:
+    * **For `stable_diffusion_scratch (2).ipynb`**:
+        * Download the Stable Diffusion v1.5 checkpoint (`v1-5-pruned-emaonly.ckpt`). A common source is the Hugging Face Hub: [runwayml/stable-diffusion-v1-5](https://huggingface.co/runwayml/stable-diffusion-v1-5/tree/main) (look for the `.ckpt` file).
+        * Place the downloaded `.ckpt` file in a `data/` directory at the root of this repository, or update the path in the notebook accordingly.
+        * This notebook also requires CLIP tokenizer files (`vocab.json`, `merges.txt`). You can:
+            * Download them from a CLIP model repository (e.g., [openai/clip-vit-large-patch14](https://huggingface.co/openai/clip-vit-large-patch14/tree/main)) and place them in an accessible path (e.g., a `tokenizer_data/` directory).
+            * Or, as a fallback for easier setup if local files are not preferred, the `CLIPTokenizer.from_pretrained('openai/clip-vit-large-patch14')` method can be used directly within the notebook, which will download them. The provided notebook might use local paths; adjust as needed.
+    * **For `storyline (1).ipynb`**:
+        * The Hugging Face `diffusers` library will automatically download the required pre-trained model (e.g., `runwayml/stable-diffusion-v1-5` or `stabilityai/stable-diffusion-2-1-base`, as specified in the notebook) and its associated tokenizer on the first run. An active internet connection is required for this initial download.
 
 ## 4. How to Run the Notebooks
-* Instructions for `stable_diffusion_scratch (2).ipynb`:
-    * "Ensure the checkpoint and tokenizer are set up as described above."
-    * "Open and run the cells sequentially."
-* Instructions for `storyline (1).ipynb`:
-    * "Open and run the cells sequentially. The first run might take time to download models."
-    * "You can modify the `story_text` variable to generate storyboards for different narratives."
+* **Instructions for `stable_diffusion_scratch (2).ipynb`**:
+    1.  Ensure the Python environment and dependencies are set up as described above.
+    2.  Download the `v1-5-pruned-emaonly.ckpt` model and ensure the CLIP tokenizer files are accessible as per the "Model Checkpoints" section. Update paths in the notebook if necessary.
+    3.  Open the notebook in a Jupyter environment (e.g., Jupyter Lab, Google Colab with GPU runtime).
+    4.  Run the cells sequentially. Note that loading models and performing inference can be computationally intensive and may require a GPU for reasonable performance.
+* **Instructions for `storyline (1).ipynb`**:
+    1.  Ensure the Python environment and dependencies are set up.
+    2.  Open the notebook in a Jupyter environment.
+    3.  Run the cells sequentially. The first execution of cells involving model loading from Hugging Face (`StableDiffusionPipeline.from_pretrained`, summarization pipeline) will download model weights and may take some time.
+    4.  You can modify the `story_text` variable within the notebook to generate storyboards for different narratives. The `summarizer` model and `StableDiffusionPipeline` model ID can also be changed to experiment with different capabilities.
 
 ## 5. Source Code Documentation
-* You can either:
-    * Briefly describe the main classes and functions here, referring to the detailed comments and Markdown within the notebooks themselves.
-    * Or, include more detailed explanations of key components, drawing from the Markdown documentation we've generated (e.g., a short paragraph on the UNet architecture, the DDPMSampler logic, the VAE, CLIP, and the main generation pipeline functions).
+
+This project implements and utilizes several key deep learning components. Below is a brief overview:
+
+* **Attention Mechanisms (`SelfAttention`, `CrossAttention`)**:
+    * These are fundamental building blocks in Transformer architectures, including CLIP and the UNet in Stable Diffusion. Self-attention allows tokens within a sequence to weigh the importance of other tokens in the same sequence. Cross-attention enables one sequence to draw information from another (e.g., image features attending to text prompt embeddings). The implementation follows the scaled dot-product attention mechanism.
+
+* **Variational Autoencoder (VAE)**:
+    * The VAE (`VAE_Encoder`, `VAE_Decoder`) is used to compress images from pixel space into a lower-dimensional latent space and to decompress latents back into images. The diffusion process operates in this more manageable latent space, making training and inference more efficient. The VAE architecture includes residual blocks and attention blocks.
+
+* **CLIP Text Encoder (`CLIPEmbedding`, `CLIPLayer`, `CLIP`)**:
+    * The Contrastive Language-Image Pre-Training (CLIP) model's text encoder is used to convert textual prompts into rich semantic embeddings. These embeddings serve as the conditioning signal for the UNet, guiding the image generation process. The implementation consists of token/positional embeddings followed by a stack of Transformer encoder layers.
+
+* **UNet Denoising Model (`TimeEmbedding`, `UNET_ResidualBlock`, `UNET_AttentionBlock`, `UNET`)**:
+    * The UNet is the core of the diffusion model. It's an encoder-decoder architecture with skip connections, designed to predict the noise present in a noisy latent representation at a given timestep. It takes the noisy latents, the timestep embedding, and the CLIP text embeddings (via cross-attention) as input.
+
+* **DDPMSampler**:
+    * This class implements the Denoising Diffusion Probabilistic Models (DDPM) sampling logic. It defines the noise schedule (betas, alphas, alphas_cumprod) and provides the `step` method to perform one reverse diffusion (denoising) step. It also includes an `add_noise` method for the forward diffusion process.
+
+* **Main Generation Pipelines**:
+    * `stable_diffusion_scratch (2).ipynb` contains a `generate` function that orchestrates the from-scratch components: encoding prompts with CLIP, preparing initial latents (random or from an image), iteratively denoising using the UNet and DDPMSampler, and finally decoding with the VAE.
+    * `storyline (1).ipynb` uses helper functions (`segment_story`, `generate_visual_prompts`, `generate_image`, `display_storyboard`) to process a story, generate prompts, call the Hugging Face `StableDiffusionPipeline` for each prompt, and display the resulting images as a storyboard.
+
+Detailed explanations and comments are provided within the Jupyter notebooks for each implemented class and function.
 
 ## 6. Example Outputs (Optional but Recommended)
-* Include one or two example images generated by each notebook. You can embed images in Markdown.
 
-## 7. Video Presentation Link
-* Once your video is ready (e.g., uploaded to YouTube or another platform), include the link here.
+*(This section should be filled by you with actual example images generated by your notebooks. You can embed images directly in Markdown if your Git platform supports it, or link to them within the repository.)*
+
+**Example from `stable_diffusion_scratch (2).ipynb`:**
